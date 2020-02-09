@@ -1,0 +1,116 @@
+#=================================================
+# Description: Build OpenWrt using GitHub Actions
+# Lisence: MIT
+# Author: Tecsoon,Wenday
+# Blog: 
+#=================================================
+name: Build ydh
+
+on: 
+  release:
+    types: [published]
+  push:
+    branches: 
+      - master
+    paths:
+      - '.config'
+# ------------------------
+  schedule:
+    - cron: 0 8 * * 5
+  watch:
+    types: [started]
+# ------------------------
+
+jobs:
+  build:
+    runs-on: ubuntu-16.04
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@master
+
+    - name: Initialization environment
+      env:
+        DEBIAN_FRONTEND: noninteractive
+      run: |
+        docker rmi `docker images -q`
+        echo "Deleting files, please wait ..."
+        sudo rm -rf \
+          /usr/share/dotnet \
+          /etc/mysql \
+          /etc/php
+        sudo -E apt-get -y purge \
+          azure-cli \
+          ghc* \
+          zulu* \
+          hhvm \
+          llvm* \
+          firefox \
+          google* \
+          dotnet* \
+          powershell \
+          openjdk* \
+          mysql* \
+          php*
+        sudo -E apt-get update
+        sudo apt-get install gcc g++ binutils patch bzip2 flex bison make autoconf gettext texinfo unzip zip unrar p7zip p7zip-rar p7zip-full sharutils subversion libncurses5-dev ncurses-term zlib1g-dev gawk git-core libssl-dev
+        sudo -E apt-get -y autoremove --purge
+        sudo -E apt-get clean
+
+    - name: Clone source code
+      env: 
+        REPO_URL: https://github.com/ivotten/YDH.git
+        REPO_BRANCH: master
+      run: git clone --depth 1 $REPO_URL openwrt
+
+    - name: Update feeds + Install feeds
+      run: |
+       cd openwrt
+       ./scripts/feeds update -a
+       ./scripts/feeds install -a
+
+#    - name: Install feeds
+#      run: cd openwrt && ./scripts/feeds install -a
+
+#    - name: Load custom configuration
+#      env:
+#        CONFIG_FILE: '.config'
+#      run: |
+#        [ -e files ] && mv files openwrt/files
+#        [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
+#        chmod +x diy.sh
+#        cd openwrt
+#        ../diy.sh
+#        make defconfig
+
+    - name: Generate config file
+      run: |
+        cd openwrt
+        make defconfig
+
+    - name: Download package
+      run: |
+        cd openwrt && make V=s -j1 download
+        find dl -size -1024c -exec ls -l {} \;
+        find dl -size -1024c -exec rm -f {} \;
+      
+#    - name: Download package
+#      run: |
+#        make V=s download -j1
+#        make -j$(nproc) V=s
+#        find dl -size -1024c -exec ls -l {} \;
+#        find dl -size -1024c -exec rm -f {} \;
+#        cd openwrt
+#        make -j$(nproc)
+
+    - name: Build
+      run: |
+        cd openwrt
+        echo -e "$(nproc) thread build."
+        make FORCE_UNSAFE_CONFIGURE=1 V=s -j1
+
+    - name : Upload artifact
+      uses: actions/upload-artifact@master
+      with:
+        name: ydh_iot_board
+        path: openwrt/bin

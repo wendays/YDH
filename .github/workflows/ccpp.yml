@@ -107,7 +107,7 @@ jobs:
       run: |
         cd openwrt
         echo -e "$(nproc) thread build."
-        make FORCE_UNSAFE_CONFIGURE=1 V=s -j1
+        make V=s -j4
 
     - name : Upload artifact
       uses: actions/upload-artifact@master

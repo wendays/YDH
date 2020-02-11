@@ -1,15 +1,8 @@
-QQ群：436431087（此群为技术交流群）
-
 简体中文：
-	此SDK是广州元电荷通信科技有限公司为元电荷YDH Kit 开发板配套发布的Openwrt系统SDK包
-	以下说明只适用于元电荷的YDH Kit开发板，其它厂商的板使用此套系统可能会导致严重后果
 
 	Linux kernel Version：3.18.29
 	Openwrt Version:15.05 
 	发布时间：2018-06-05
-
-	元电荷YDH Kit开发板购买地址:
-	https://item.taobao.com/item.htm?spm=a230r.1.14.22.46171b1el9LmZw&id=561138458446&ns=1&abbucket=13#detail
 
 	开发环境：Ubuntu 64位操作系统
 
@@ -33,7 +26,7 @@ QQ群：436431087（此群为技术交流群）
 			Subtarget --> 
 				MT7628 based boards
 			Target Profile -->
-				YDH Kit 256MByte 32MByte(此处必须按照你所购买的核心板的配置选择，否则将会导致内核奔溃而无法使用)
+				YDH Kit 256MByte 16MByte(此处必须按照你所购买的核心板的配置选择，否则将会导致内核奔溃而无法使用)
 
 		保存并退出
 
@@ -41,81 +34,3 @@ QQ群：436431087（此群为技术交流群）
 
 		烧录到开发板测试
 
-繁体中文：
-	此SDK是廣州元電荷通信科技有限公司為元電荷YDH Kit 開發板配套發布的Openwrt系統SDK包
-	以下說明只適用於元電荷的YDH Kit開發板，其它廠商的板使用此套系統可能會導致嚴重後果
-
-	Linux kernel Version：3.18.29
-	Openwrt Version:15.05
-	發布時間：2018-06-05
-
-	元電荷YDH Kit開發板購買地址:
-	https://item.taobao.com/item.htm?spm=a230r.1.14.22.46171b1el9LmZw&id=561138458446&ns=1&abbucket=13#detail
-
-	開發環境：Ubuntu 64位操作系統
-
-	部署開發環境：
-		打開Ubuntu系統的terminal, 然後輸入以下命令：
-		sudo apt-get update
-
-		sudo apt-get install gcc g++ binutils patch bzip2 flex bison make autoconf \ 
-			gettext texinfo unzip zip unrar p7zip p7zip-rar p7zip-full sharutils subversion \
-			libncurses5-dev ncurses-term zlib1g-dev gawk git-core libssl-dev
-
-		等待軟件包安裝完成以後，運行以下命令，獲取源碼：
-		git clone https://github.com/ivotten/YDH.git
-
-		更新並安裝LEDE的新依賴包
-		./scripts/feeds update -a && ./scripts/feeds install -a
-
-		運行make menuconfig 命令，選擇：
-			Target System -->
-				Ralink RT288x/RT3xxx
-			Subtarget --> 
-				MT7628 based boards
-			Target Profile -->
-				YDH Kit 256MByte 32MByte(此處必須按照妳所購買的核心板的配置選擇，否則將會導致內核奔潰而無法使用)
-
-		保存並退出
-
-		運行make V=s -j 4編譯得到對應的固件
-
-		燒錄到開發板測試
-
-English:
-	This SDK is based on Openwrt system issued by Guangzhou YuanDianHe Technology Co., Ltd. for the meta charge YDH Kit iot development board.
-	The following description is only applicable to the YDH Kit iot development board.
-
-	Linux kernel Version：3.18.29
-	Openwrt Version: 15.05
-	Release time：2018-06-05
-
-	YDH Kit Iot Board purchase address: https://item.taobao.com/item.htm?spm=a230r.1.14.22.46171b1el9LmZw&id=561138458446&ns=1&abbucket=13#detail
-
-	How to compile?:
-		Ubuntu 16.04 64Bit
-
-		1.install depend
-			sudo apt-get install gcc g++ binutils patch bzip2 flex bison make autoconf \ 
-				gettext texinfo unzip zip unrar p7zip p7zip-rar p7zip-full sharutils subversion \
-				libncurses5-dev ncurses-term zlib1g-dev gawk git-core libssl-dev
-
-		2.download the source use git
-			git clone https://github.com/ivotten/YDH_LEDE.git
-
-		3.update the feeds	
-			./scripts/feeds update -a && ./scripts/feeds install -a					
-
-		4.config
-			Target System -->
-				Ralink RT288x/RT3xxx
-			Subtarget --> 
-				MT7628 based boards
-			Target Profile -->
-				YDH Kit 256MByte 32MByte (Choosed according to your actual situation )
-
-		5.make 
-			make V=s -j4
-
-		6.image
-			the binary image name like this in bin/ramips/: openwrt-ramips-mt7628-ydh_128MByte_16MByte-squashfs-sysupgrade.bin

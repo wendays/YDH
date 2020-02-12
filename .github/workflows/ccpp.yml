@@ -59,7 +59,7 @@ jobs:
         df -h
     - name: Clone source code
       env: 
-        REPO_URL: https://github.com/ivotten/YDH.git
+        REPO_URL: https://github.com/wendays/YDH.git
         REPO_BRANCH: master
       run: git clone --depth 1 $REPO_URL openwrt
 
